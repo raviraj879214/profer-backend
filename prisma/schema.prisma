@@ -1,0 +1,50 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  password    String
+  roleId      Int
+  role        Role     @relation(fields: [roleId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  passwordresetlink String
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  users       User[]
+  permissions Permission[]
+}
+
+model Module {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  permissions Permission[]
+}
+
+model Permission {
+  id        Int     @id @default(autoincrement())
+  roleId    Int
+  moduleId  Int
+  role      Role    @relation(fields: [roleId], references: [id])
+  module    Module  @relation(fields: [moduleId], references: [id])
+  canCreate Boolean @default(false)
+  canRead   Boolean @default(true)
+  canUpdate Boolean @default(false)
+  canDelete Boolean @default(false)
+}
+
