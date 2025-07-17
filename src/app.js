@@ -34,7 +34,11 @@ app.use('/api',checkloginrouter);
 
 // ✅ 404 fallback
 app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
+  res.status(404).json({
+    status: 404,
+    error: 'Route not found'
+  });
 });
+
 
 module.exports = app;
