@@ -12,7 +12,7 @@ router.get('/public',authenticate,checkPermission('Orders','Read'),testPublic);
 
 
 
-router.get('/protected',testProtected);
+router.get('/protected',authenticate,testProtected);
 
 
 
