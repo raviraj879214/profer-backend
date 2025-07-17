@@ -3,7 +3,7 @@ const app = require('./app'); // your express app
 const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 async function startServer() {
   try {

@@ -1,26 +1,22 @@
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-
-
-
 model User {
-  id          Int      @id @default(autoincrement())
-  name        String
-  email       String   @unique
-  password    String
-  roleId      Int
-  role        Role     @relation(fields: [roleId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  passwordresetlink String
+  id                 Int      @id @default(autoincrement())
+  name               String
+  email              String   @unique
+  password           String
+  roleId             Int
+  role               Role     @relation(fields: [roleId], references: [id])
+  createdAt          DateTime // No default allowed in MySQL 5.0
+  updatedAt          DateTime // No default allowed in MySQL 5.0
+  passwordresetlink  String
 }
 
 model Role {
@@ -47,4 +43,3 @@ model Permission {
   canUpdate Boolean @default(false)
   canDelete Boolean @default(false)
 }
-
