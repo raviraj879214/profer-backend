@@ -36,7 +36,7 @@ app.use('/api',checkloginrouter);
 app.use((req, res) => {
   res.status(404).json({
     status: 404,
-    error: 'Route not found'
+    error: 'Route not found from node server'
   });
 });
 
