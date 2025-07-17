@@ -14,10 +14,11 @@ model User {
   password           String
   roleId             Int
   role               Role     @relation(fields: [roleId], references: [id])
-  createdAt          DateTime // No default allowed in MySQL 5.0
-  updatedAt          DateTime // No default allowed in MySQL 5.0
+  createdAt          DateTime @default(now())  // ✅ Add default
+  updatedAt          DateTime @updatedAt       // ✅ Auto-updates on change
   passwordresetlink  String
 }
+
 
 model Role {
   id          Int      @id @default(autoincrement())
