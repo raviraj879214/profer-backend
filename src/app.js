@@ -5,7 +5,7 @@ const app = express();
 
 // ✅ Enable CORS here
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: `${process.env.FRONTEND_PUBLIC_URL}`,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
