@@ -44,3 +44,33 @@ model Permission {
   canUpdate Boolean @default(false)
   canDelete Boolean @default(false)
 }
+
+
+model RoofingRequest {
+  id                Int       @id @default(autoincrement())
+  fullName          String?
+  phone             String?
+  email             String?
+  preferredContact  String?   // "Call" | "Email" | "SMS"
+  
+  propertyType      String?   // "Residential" | "Commercial" | "Industrial"
+  address           String?
+  city              String?
+  state             String?
+  zipCode           String?
+  propertySize      String?   // Sq. ft (optional)
+  buildingAge       Int?      // Age in years (optional)
+  
+  serviceNeeded     String?    // "Installation" | "Replacement" | "Repair" | "Inspection"
+  roofType          String?   // "Asphalt" | "Metal" | "Tile" | "Flat" | "Other"
+  problemDescription String?  // User's description of the issue
+  
+  urgency           String?   // "ASAP" | "Within a Month" | "Just Exploring"
+  estimatedBudget   String?   // "Under 5k" | "5k-10k" | "10k+"
+  preferredStartDate DateTime?
+
+  photoUrls         String[]  // Array of image URLs (if uploaded)
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}

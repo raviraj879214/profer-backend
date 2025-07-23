@@ -22,6 +22,8 @@ exports.authenticate = async (req, res, next) => {
 
     // Optional: Log expiry time
     console.log('Token expires at:', new Date(decoded.exp * 1000).toLocaleString());
+    console.log('Decoded token:', decoded.id);
+
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
