@@ -5,7 +5,7 @@ const app = express();
 
 // ✅ Enable CORS here
 app.use(cors({
-  origin: 'https://profer-ui.vercel.app/',  // Removed trailing slash
+  origin: 'https://profer-ui.vercel.app',  // Removed trailing slash
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
