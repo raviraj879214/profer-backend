@@ -4,12 +4,14 @@ const cors = require('cors');
 const app = express();
 
 // ✅ Enable CORS here
+
+const allowedOrigin = process.env.FRONTEND_PUBLIC_URL || 'http://localhost:3000';
+
 app.use(cors({
-  origin: 'https://profer-ui.vercel.app/',  // Removed trailing slash
+  origin: allowedOrigin,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
-
 
 
 
