@@ -1,5 +1,5 @@
 const express = require('express');
-const { createRoofingRequest, getRoofingRequests } = require('../controllers/roofingrequest.controller');
+const { createRoofingRequest, getRoofingRequests, deleteRoofingRequest } = require('../controllers/roofingrequest.controller');
 const createMulterUpload = require('../lib/uploadHelper');
 const { authenticate } = require('../middlewares/auth.middleware');
 const router = express.Router();
@@ -13,6 +13,7 @@ router.post('/create-roof-request', upload.array("photos", 5), createRoofingRequ
 router.get('/get-roofing-requests',authenticate, getRoofingRequests);
  
 
+router.delete('/delete-roofing-request/:id',authenticate,deleteRoofingRequest);
 
 
 
