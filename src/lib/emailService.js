@@ -27,8 +27,12 @@ const sendEmail = async ({ to, subject, text, html }) => {
     console.log("Email sent: ", info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error("Email sending failed:", error);
-    return { success: false, error };
+    console.error("Email sending failed:", error);  // Log full error details
+    return { 
+      success: false, 
+      error: error.message || "An unknown error occurred while sending email", 
+      stack: error.stack // Optional: Include stack trace for debugging
+    };
   }
 };
 

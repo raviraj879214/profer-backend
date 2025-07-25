@@ -8,16 +8,52 @@ datasource db {
 }
 
 model User {
-  id                 Int      @id @default(autoincrement())
-  name               String
-  email              String   @unique
-  password           String
+  id                 Int       @id @default(autoincrement())
+  firstname          String?
+  lastname           String?
+  email              String    @unique
+  password           String?
+  address            String?
+  city               String?
+  state              String?
+  zipCode            String?
   roleId             Int
-  role               Role     @relation(fields: [roleId], references: [id])
-  createdAt          DateTime @default(now())  // ✅ Add default
-  updatedAt          DateTime @updatedAt       // ✅ Auto-updates on change
-  passwordresetlink  String
+  role               Role      @relation(fields: [roleId], references: [id])
+  startdate          DateTime?
+  enddate            DateTime?
+  status             String?   @default("active")
+  passwordresetlink  String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  subscriptions      Subscriptions[]  // Relation to Subscriptions
+
+  @@map("User")  // Map to actual table name
 }
+
+
+model Subscriptions {
+  SubscriptionID        Int       @id @default(autoincrement())
+  userId                Int       // Foreign key to User
+  StripeSubscriptionID  String    @db.VarChar(255)
+  PlanName              String    @db.VarChar(100)
+  PlanType              String    @db.VarChar(50)
+  Amount                Decimal   @db.Decimal(10, 2)   // MySQL uses DECIMAL
+  Currency              String    @default("USD") @db.VarChar(10)
+  StartDate             DateTime  @default(now())
+  EndDate               DateTime?
+  RenewalPeriod         Int?
+  Status                String    @default("active") @db.VarChar(50)
+  CreatedAt             DateTime  @default(now())
+  UpdatedAt             DateTime  @updatedAt
+
+  // Relation to Users table
+  user                  User      @relation(fields: [userId], references: [id])
+
+  @@map("Subscriptions")  // Map to your MySQL table name (if existing)
+}
+
+
 
 
 model Role {
@@ -74,3 +110,25 @@ model RoofingRequest {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 }
+
+
+model TempUser {
+  id           Int      @id @default(autoincrement())
+  firstname    String?
+  lastname     String?
+  emailaddress String   @unique
+  otp          String?
+  address      String?
+  city         String?
+  state        String?
+  zipCode      String? 
+  paymentintentid String?
+  startdate    DateTime?
+  enddate      DateTime?
+  status       String?
+  password     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+
