@@ -90,7 +90,6 @@ exports.adminforgotpassword = async (req, res) => {
                 </div>`
             });
 
-
           if (result.success) {
             return res.json({ status: 200, message: "Email sent successfully to your email please go to email reset password" });
           } else {

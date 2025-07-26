@@ -5,51 +5,75 @@ const prisma = new PrismaClient();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-
+const sendEmail = require('../lib/emailService');
 
 exports.createuserandsendotp = async (req, res) => {
-    try {
-        const { emailaddress , status } = req.body;
+  try {
+    const { emailaddress, status } = req.body;
 
-        const usercheck = await prisma.TempUser.findUnique({ where: { emailaddress } });
+    const otp = (Math.floor(100000 + Math.random() * 900000)).toString();
 
-        const otp = (Math.floor(100000 + Math.random() * 900000)).toString();
+    // Check if user exists
+    const usercheck = await prisma.TempUser.findUnique({ where: { emailaddress } });
 
-        if (usercheck) {
-            await prisma.TempUser.update({
-                where: { emailaddress },
-                data: { otp }
-            });
-            return res.json({ 
-                status: 200, 
-                message: 'Otp sent to email address',
-                email: emailaddress,
-                otp: otp 
-              
-            });
-        } else {
-            await prisma.TempUser.create({
-                data: {
-                    emailaddress,
-                    otp,
-                    status
-                }
-            });
-            return res.json({ 
-                status: 200, 
-                message: 'User created and Otp sent to email address',
-                email: emailaddress,
-                otp: otp 
-            });
-        }
-    } catch (error) {
-        res.json({ 
-            status: 500, 
-            error: 'Error creating user and sending OTP', 
-            details: error.message 
-        });
+    
+
+
+
+
+
+
+
+    if (usercheck) {
+      // Update OTP if user exists
+      await prisma.TempUser.update({
+        where: { emailaddress },
+        data: { otp }
+      });
+    } else {
+      // Create new user
+      await prisma.TempUser.create({
+        data: { emailaddress, otp, status }
+      });
     }
+
+    // Send OTP email
+    const emailsent = await sendEmail({
+      to: emailaddress,  // FIXED: use correct variable
+      subject: "Your OTP Code for Verification",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 6px;">
+          <h2 style="color: #333;">One-Time Password (OTP)</h2>
+          <p>Your One-Time Password (OTP) for verification is:</p>
+          <div style="font-size: 24px; font-weight: bold; margin: 20px 0; color: #007bff;">
+            ${otp}
+          </div>
+          <p>This OTP is valid for <strong>10 minutes</strong>. Please do not share it with anyone.</p>
+          <p>If you did not request this, you can safely ignore this email.</p>
+          <p style="color: #999;">Thanks,<br/>The YourCompany Team</p>
+        </div>`
+    });
+
+    if (!emailsent.success) {
+      return res.json({ status: 500, message: "Failed to send email" });
+    }
+
+    return res.json({
+      status: 200,
+      message: usercheck ? 'Otp updated and sent' : 'User created and Otp sent',
+      email: emailaddress,
+      otp
+    });
+
+  } catch (error) {
+    res.json({
+      status: 500,
+      error: 'Error creating user and sending OTP',
+      details: error.message
+    });
+  }
 };
+
 
 
 

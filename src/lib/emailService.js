@@ -3,15 +3,26 @@ const nodemailer = require('nodemailer');
 
 
 // Configure the transporter
+// const transporter = nodemailer.createTransport({
+//   host: process.env.SMTP_HOST,
+//   port: 587,
+//   secure: false,
+//   auth: {
+//     user: process.env.SMTP_USER,
+//     pass:  process.env.SMTP_PASS,         
+//   }
+// });
+
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: 2525,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass:  process.env.SMTP_PASS,         
-  }
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+        user: 'peggie.swaniawski3@ethereal.email',
+        pass: 'htJGs4sj9a8w7Y9DUt'
+    }
 });
+
+
 
 // Send Email Function
 const sendEmail = async ({ to, subject, text, html }) => {
