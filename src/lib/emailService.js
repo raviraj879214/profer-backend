@@ -20,7 +20,11 @@ const transporter = nodemailer.createTransport({
         user: 'peggie.swaniawski3@ethereal.email',
         pass: 'htJGs4sj9a8w7Y9DUt'
     }
+    
 });
+
+
+
 
 
 
