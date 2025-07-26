@@ -210,7 +210,7 @@ exports.transfertempusertousertable = async (req, res) => {
           startdate: tempUser.startdate,
           enddate: tempUser.enddate,
           status: "0",
-          passwordresetlink: tempUser.passwordresetlink || "",
+          passwordresetlink: crypto.randomBytes(32).toString('hex'),
         },
       });
 
