@@ -25,6 +25,7 @@ exports.createuserandsendotp = async (req, res) => {
                 message: 'Otp sent to email address',
                 email: emailaddress,
                 otp: otp 
+              
             });
         } else {
             await prisma.TempUser.create({
@@ -171,7 +172,7 @@ exports.transfertempusertousertable = async (req, res) => {
 
     // 3. Transaction: Create user + subscription + delete temp user
     const [newUser, newSubscription] = await prisma.$transaction(async (tx) => {
-      const user = await tx.user.create({
+      const user = await tx.User.create({
         data: {
           firstname: tempUser.firstname,
           lastname: tempUser.lastname,
@@ -181,15 +182,15 @@ exports.transfertempusertousertable = async (req, res) => {
           city: tempUser.city,
           state: tempUser.state,
           zipCode: tempUser.zipCode,
-          roleId: 1, // default role
+          roleId: 4, // default role
           startdate: tempUser.startdate,
           enddate: tempUser.enddate,
-          status: tempUser.status || "active",
+          status: "0",
           passwordresetlink: tempUser.passwordresetlink || "",
         },
       });
 
-      const subscription = await tx.subscription.create({
+      const subscription = await tx.Subscriptions.create({
         data: {
           userId: user.id,
           StripeSubscriptionID: tempUser.paymentintentid || "pending",
@@ -279,6 +280,7 @@ exports.proslogin = async (req, res) => {
         id: user.id,
         email: user.email, // or emailaddress if that's your field
         role: user.role?.name,
+        status : user.status
       },
     });
   } catch (error) {

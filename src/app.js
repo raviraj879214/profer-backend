@@ -5,8 +5,8 @@ const app = express();
 
 // ✅ Enable CORS here
 app.use(cors({
-   origin: 'https://profer-ui.vercel.app',  
-  // origin: 'http://localhost:3000',  
+    origin: 'https://profer-ui.vercel.app',  
+   //origin: 'http://localhost:3000',  
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
