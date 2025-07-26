@@ -14,16 +14,16 @@ exports.createuserandsendotp = async (req, res) => {
     const otp = (Math.floor(100000 + Math.random() * 900000)).toString();
 
     // Check if user exists
+
+    const checkemailinusertable = await prisma.user.findUnique({ where: { email : emailaddress }});
+    if(checkemailinusertable){
+       return res.json({ status: 400, message: "email already existed please try other" });
+    }
+
+
     const usercheck = await prisma.TempUser.findUnique({ where: { emailaddress } });
 
     
-
-
-
-
-
-
-
     if (usercheck) {
       // Update OTP if user exists
       await prisma.TempUser.update({
