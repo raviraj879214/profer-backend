@@ -5,13 +5,26 @@ const nodemailer = require('nodemailer');
 // Configure the transporter
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: 587,
-  secure: false,
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.SMTP_USER,
     pass:  process.env.SMTP_PASS,         
   }
 });
+
+
+// let transporter = nodemailer.createTransport({
+//     host: "smtp.gmail.com",
+//     port: 465,
+//     secure: true, // true for 465, false for other ports
+//     auth: {
+//       user: "ravirajalphainfo@gmail.com",
+//       pass: "dtdt usys ucsn fdva", // use App Password if 2FA is enabled
+//     },
+//   });
+
+
 
 // const transporter = nodemailer.createTransport({
 //     host: 'smtp.ethereal.email',
@@ -21,8 +34,6 @@ const transporter = nodemailer.createTransport({
 //         pass: 'htJGs4sj9a8w7Y9DUt'
 //     }
 // });
-
-
 
 
 // Send Email Function
