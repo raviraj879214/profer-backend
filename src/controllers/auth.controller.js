@@ -16,13 +16,13 @@ const generateToken = (user) => {
 
 
 exports.register = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { firstname, email, password, role } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
       data: {
-        name,
+        firstname,
         email,
         password: hashedPassword,
         roleId: parseInt(role),

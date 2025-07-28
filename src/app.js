@@ -5,8 +5,8 @@ const app = express();
 
 // ✅ Enable CORS here
 app.use(cors({
-   origin: 'https://profer-ui.vercel.app',  
-  //origin: 'http://localhost:3000',  
+  // origin: 'https://profer-ui.vercel.app',  
+  origin: 'http://localhost:3000',  
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
@@ -30,6 +30,7 @@ const roleRouter = require('./routes/roles.routes');
 const checkloginrouter = require('./routes/login.check.routes');
 const roofingroute = require('./routes/roofingrequest.auth.js');
 const proRouter = require('./routes/pro.route.js');
+const probusinessRouter = require('./routes/pros.business.routes.js');
 
 
 app.use('/api', authRouter);
@@ -45,13 +46,18 @@ app.use('/api',roofingroute);
 
 
 
-app.use('/uploads', express.static('uploads')); // <-- serve uploaded files
+const path = require('path');
+
+// Serve uploads folder as static
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 
 //pros registeration 
 app.use('/api',proRouter);
 
-
+//pros business details
+app.use('/api',probusinessRouter);
 
 
 

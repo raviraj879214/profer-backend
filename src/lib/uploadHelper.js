@@ -8,11 +8,12 @@ function createMulterUpload(folder) {
     if (!fs.existsSync(fullPath)) fs.mkdirSync(fullPath, { recursive: true });
 
     const storage = multer.diskStorage({
-        destination: function (req, file, cb) {
+        destination: (req, file, cb) => {
             cb(null, fullPath);
         },
-        filename: function (req, file, cb) {
-            cb(null, Date.now() + '-' + file.originalname);
+        filename: (req, file, cb) => {
+            const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
+            cb(null, uniqueName);
         }
     });
 

@@ -27,7 +27,7 @@ model User {
   updatedAt          DateTime  @updatedAt
 
   subscriptions      Subscriptions[]  // Relation to Subscriptions
-
+  businessDetails    ProBusinessDetails?
   @@map("User")  // Map to actual table name
 }
 
@@ -132,3 +132,30 @@ model TempUser {
 }
 
 
+model ProBusinessDetails {
+  id                 Int       @id @default(autoincrement())
+  userId             Int       @unique
+  user               User      @relation(fields: [userId], references: [id])
+
+  companyName        String?
+  companyPhone       String?
+  companyEmail       String?
+  streetAddress      String?
+  city               String?
+  state              String ?    
+  zip                String?
+  ein                String?
+
+  ownerFirstName     String?
+  ownerLastName      String?
+  ownerEmail         String?
+
+  services           String     @db.Text    // <-- change to Text
+  qualifications     String     @db.Text    // <-- change to Text
+  companyLogo        String?    @db.Text    // <-- change to Text (file path can be long)
+  ownerLicense       String?    @db.Text    // (future file)
+  
+
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+}

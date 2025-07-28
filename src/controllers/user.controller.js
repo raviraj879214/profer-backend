@@ -21,7 +21,7 @@ exports.testProtected = (req, res) => {
     user: {
       id: req.user.id,
       email: req.user.email,
-      role: req.user.role,
+      role: req.user.role.name,
     },
   });
 };

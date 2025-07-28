@@ -27,12 +27,16 @@ exports.authenticate = async (req, res, next) => {
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
+       include: {
+          role: true,  // <-- Include the related role
+        },
     });
 
     if (!user) {
       return res.json({status : 401, error: 'Invalid token user' });
     }
-
+    req.user = user;
+    console.log("user details",user);
     req.user = user;
     next();
   } catch (err) {
