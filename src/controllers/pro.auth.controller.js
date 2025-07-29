@@ -209,7 +209,7 @@ exports.transfertempusertousertable = async (req, res) => {
           roleId: 4, // default role
           startdate: tempUser.startdate,
           enddate: tempUser.enddate,
-          status: "0",
+          // status: null,
           passwordresetlink: crypto.randomBytes(32).toString('hex'),
         },
       });

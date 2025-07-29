@@ -33,12 +33,7 @@ exports.createprosBusinessRequest = async (req, res) => {
       ? `${baseUrl}/uploads/prosbusiness/${req.files['ownerLicense'][0].filename}`
       : null;
 
-      const userUpdate = await prisma.user.update({
-      where: { id: parsedUserId },   // <-- specify which user
-      data: {
-        status: "1"                  // <-- field you want to update
-      }
-    });
+      
 
 
     const upsertedBusiness = await prisma.proBusinessDetails.upsert({
