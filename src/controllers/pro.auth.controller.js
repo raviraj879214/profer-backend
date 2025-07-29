@@ -6,6 +6,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const sendEmail = require('../lib/emailService');
+const emailHeader = require("../lib/templates/partials/emailHeader");
+const emailFooter = require("../lib/templates/partials/emailFooter");
+
+
 
 exports.createuserandsendotp = async (req, res) => {
   try {
@@ -43,6 +47,8 @@ exports.createuserandsendotp = async (req, res) => {
       subject: "Your OTP Code for Verification",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 6px;">
+        ${emailHeader()}
+
           <h2 style="color: #333;">One-Time Password (OTP)</h2>
           <p>Your One-Time Password (OTP) for verification is:</p>
           <div style="font-size: 24px; font-weight: bold; margin: 20px 0; color: #007bff;">
@@ -51,6 +57,8 @@ exports.createuserandsendotp = async (req, res) => {
           <p>This OTP is valid for <strong>10 minutes</strong>. Please do not share it with anyone.</p>
           <p>If you did not request this, you can safely ignore this email.</p>
           <p style="color: #999;">Thanks,<br/>The YourCompany Team</p>
+
+        ${emailFooter()}
         </div>`
     });
 

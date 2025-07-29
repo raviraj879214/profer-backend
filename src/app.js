@@ -48,9 +48,12 @@ app.use('/api',probusinessRouter);
 
 //admin route 
 const comapniesrouter = require('./routes/admin/companies.route.js');
-app.use('/api/',comapniesrouter);
+const admindetailsrouter = require('./routes/admin/admindetails.route.js');
+app.use('/api',comapniesrouter);
 
 
+//admin details 
+app.use('/api',admindetailsrouter);
 
 
 
