@@ -65,9 +65,14 @@ exports.login = async (req, res) => {
 exports.adminforgotpassword = async (req, res) => {
   try {
     const { email } = req.body;
+     
+      
     const userEmail = await prisma.user.findUnique({
         where: { email },
       });
+
+    
+   
       console.log(userEmail);
       if (userEmail !== null) 
       {
@@ -108,7 +113,6 @@ exports.adminforgotpassword = async (req, res) => {
 };
 
 
-
 exports.resetpasswordconfirmation = async (req,res)=>{
   try{
      const {passwordresetlink} = req.body;
@@ -128,14 +132,34 @@ exports.resetpasswordconfirmation = async (req,res)=>{
   catch(ex){
       res.json({status : 500 , message : ex.message});
   }
-
-
-
-
-
-
-
-
-
-
 }
+
+exports.resetpassword = async (req, res) => {
+  try {
+    const { password, passwordresetlink } = req.body;
+
+    // Use findFirst if not unique
+    const resetuser = await prisma.user.findFirst({
+      where: { passwordresetlink },
+    });
+
+    if (!resetuser) {
+      return res.json({ status: 400, message: "User not found or link invalid" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await prisma.user.update({
+      where: { id: resetuser.id },
+      data: {
+        password: hashedPassword,
+        passwordresetlink: crypto.randomBytes(32).toString('hex'),
+      },
+    });
+
+    return res.json({ status: 200, message: "Password updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.json({ status: 500, message: error.message });
+  }
+};

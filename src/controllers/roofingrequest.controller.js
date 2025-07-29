@@ -76,12 +76,10 @@ exports.deleteRoofingRequest = async (req, res) => {
     if (ids.length === 0) {
       return res.json({ status: 400, message: "No valid IDs provided" });
     }
-
     // Check if records exist
     const existingRequests = await prisma.roofingRequest.findMany({
       where: { id: { in: ids } },
     });
-
     if (existingRequests.length === 0) {
       return res.json({ status: 404, message: "No roofing requests found for provided IDs" });
     }
@@ -90,16 +88,11 @@ exports.deleteRoofingRequest = async (req, res) => {
     await prisma.roofingRequest.deleteMany({
       where: { id: { in: ids } },
     });
-
     return res.json({status: 200,message: "Roofing request(s) deleted successfully",deletedCount: existingRequests.length});
-
   } 
   catch (error)
   {
-   
     return res.json({status: 500,message: "Internal Server Error",error: error.message});
   }
-
-
 };
 
