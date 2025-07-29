@@ -44,6 +44,7 @@ const sendEmail = async ({ to, subject, text, html }) => {
       to,
       subject,
       text,
+      
       html
     });
 

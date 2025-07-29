@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const emailHeader = require("../lib/templates/partials/emailHeader");
+const emailFooter = require("../lib/templates/partials/emailFooter");
 
 const { PrismaClient } = require('@prisma/client'); 
 const sendEmail = require('../lib/emailService');
@@ -83,16 +85,24 @@ exports.adminforgotpassword = async (req, res) => {
               to: email,
               subject: "Reset Your Password",
               html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 6px;">
-                  <h2 style="color: #333;">Password Reset Request</h2>
-                  <p>Hi <strong>${userEmail.name}</strong>,</p>
-                  <p>You recently requested to reset your password for your account. Click the button below to reset it.</p>
-                  <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; margin: 20px 0; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 4px;">
-                    Reset Password
-                  </a>
-                  <p>If you didn’t request a password reset, you can safely ignore this email.</p>
-                  <p style="color: #999;">Thanks,<br/>The YourCompany Team</p>
-                </div>`
+               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 0; border: 1px solid #eaeaea; border-radius: 6px; overflow: hidden;">
+              ${emailHeader()}
+
+              <!-- BODY -->
+              <div style="padding: 20px;">
+                <h2 style="color: #333;">Password Reset Request</h2>
+                <p>Dear sir <strong></strong>,</p>
+                <p>You recently requested to reset your password for your account. Click the button below to reset it.</p>
+                <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; margin: 20px 0; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 4px;">
+                  Reset Password
+                </a>
+                <p>If you didn’t request a password reset, you can safely ignore this email.</p>
+                <p style="color: #999;">Thanks,<br/>The YourCompany Team</p>
+              </div>
+
+              ${emailFooter()}
+            </div>
+            `
             });
 
           if (result.success) {
