@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Cms" ALTER COLUMN "CmsText" DROP NOT NULL;
