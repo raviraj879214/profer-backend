@@ -23,7 +23,7 @@ exports.createprosBusinessRequest = async (req, res) => {
       return res.status(400).json({ message: "Invalid or missing userId" });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const baseUrl = process.env.Next_PUBLIC_BACKEND_URL;
 
     const companyLogo = req.files['companyLogo']?.[0]
       ? `${baseUrl}/uploads/prosbusiness/${req.files['companyLogo'][0].filename}`
