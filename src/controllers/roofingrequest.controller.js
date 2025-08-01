@@ -1,60 +1,95 @@
 const { PrismaClient } = require('@prisma/client'); 
 const prisma = new PrismaClient(); 
 
+
+
 exports.createRoofingRequest = async (req, res) => {
   try {
     const { 
-      fullName, phone, email, preferredContact,
-      propertyType, propertySize, address, buildingAge,
-      serviceNeeded, roofType, problemDescription,
-      urgency
+      fullName, phoneNumber, emailAddress, preferredContactMethod,
+      preferredCallingTime, projectTitle, projectAddress, projectDetails,
+      productType, productColor, productPreference,
+      workDescription
     } = req.body;
 
-    // Map uploaded file URLs
-    const photoUrls = req.files?.map(file => 
-      `${req.protocol}://${req.get("host")}/uploads/roofing/${file.filename}`
-    ) || [];
+         const drawings = req.files['drawings']?.[0] || null;
+          const insurance = req.files['insurance']?.[0] || null;
+          const projectOther = req.files['projectother']?.[0] || null;
+          const mediaFiles = req.files['mediaFiles'] || [];
 
-    // Save to database
+          // Build all files array for DB with full URL
+          const allFiles = [];
+          const baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/roofing`;
+
+          if (drawings) {
+            allFiles.push({
+              fileType: 'drawing',
+              originalName: drawings.originalname,
+              fileUrl: `${baseUrl}/${drawings.filename}`,
+            });
+          }
+          if (insurance) {
+            allFiles.push({
+              fileType: 'insurance',
+              originalName: insurance.originalname,
+              fileUrl: `${baseUrl}/${insurance.filename}`,
+            });
+          }
+          if (projectOther) {
+            allFiles.push({
+              fileType: 'projectOther',
+              originalName: projectOther.originalname,
+              fileUrl: `${baseUrl}/${projectOther.filename}`,
+            });
+          }
+          mediaFiles.forEach(file => {
+            allFiles.push({
+              fileType: 'media',
+              originalName: file.originalname,
+              fileUrl: `${baseUrl}/${file.filename}`,
+            });
+          });
+
+
+    // Save roofing request with related files
     const newRequest = await prisma.roofingRequest.create({
       data: {
         fullName,
-        phone,
-        email,
-        preferredContact,
-        propertyType,
-        propertySize,
-        address,
-        buildingAge: buildingAge ? parseInt(buildingAge) : null,
-        serviceNeeded,
-        roofType,
-        problemDescription,
-        urgency,
-        photoUrls,
+        phoneNumber,
+        emailAddress,
+        preferredContactMethod,
+        preferredCallingTime,
+        projectTitle,
+        projectAddress,
+        projectDetails,
+        productType,
+        productColor,
+        productPreference,
+        workDescription,
+        files: {
+          create: allFiles
+        }
       },
+      include: { files: true }
     });
 
-    return res.status(201).json({
-      message: "Roofing request created successfully",
-      request: newRequest
-    });
-
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal Server Error", error: error.message });
+    return res.json({status : 200,message: "Roofing request created successfully",data: newRequest});
+  } 
+  catch (error) 
+  {
+    console.log("error message",error.message);
+    return res.json({status : 500,message: "Internal Server Error", error: error.message });
   }
 };
 
 
 
 
-
 exports.getRoofingRequests = async (req, res) => {
   try {
-    const requests = await prisma.roofingRequest.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
+     const requests = await prisma.roofingRequest.findMany({
+      orderBy: { createdAt: 'desc' },
+     include: { files: true }
     });
 
     return res.json({status : 200 ,data : requests});

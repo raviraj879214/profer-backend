@@ -9,8 +9,23 @@ const upload = createMulterUpload('uploads/roofing');
 
 
 
-// Handle form + photo uploads
-router.post('/create-roof-request', upload.array("photos", 5), createRoofingRequest);
+
+router.post(
+  "/create-roof-request",
+  upload.fields([
+    { name: "drawings", maxCount: 1 },
+    { name: "insurance", maxCount: 1 },
+    { name: "projectother", maxCount: 1 },
+    { name: "mediaFiles", maxCount: 10 } // multiple files
+  ]),
+  createRoofingRequest
+);
+
+
+
+
+
+
 
 
 router.get('/get-roofing-requests',authenticate, getRoofingRequests);

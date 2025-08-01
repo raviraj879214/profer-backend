@@ -6,7 +6,7 @@ const app = express();
 // ✅ Enable CORS here
 app.use(cors({
    origin: 'https://profer-ui.vercel.app',  
-  //origin: 'http://localhost:3000',  
+ // origin: 'http://localhost:3000',  
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
@@ -50,6 +50,7 @@ app.use('/api',probusinessRouter);
 const comapniesrouter = require('./routes/admin/companies.route.js');
 const admindetailsrouter = require('./routes/admin/admindetails.route.js');
 const admincmsrouter = require('./routes/admin/cms.routes.js');
+const admminprojectdetails = require('./routes/admin/project.route.js');
 app.use('/api',comapniesrouter);
 
 
@@ -60,9 +61,17 @@ app.use('/api',admindetailsrouter);
 app.use('/api',admincmsrouter);
 
 
+//admin project details
+app.use('/api',admminprojectdetails);
 
 
 
+//pros route 
+const probusinessrouter = require("./routes/pro/business.route.js");
+const projectrouter = require("./routes/pro/project.route.js");
+app.use('/api',probusinessrouter);
+
+app.use('/api',projectrouter);
 
 
 
