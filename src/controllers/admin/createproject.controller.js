@@ -1,7 +1,9 @@
 const { PrismaClient } = require('@prisma/client'); 
 const prisma = new PrismaClient(); 
 
-
+const emailHeader = require("../../lib/templates/partials/emailHeader");
+const emailFooter = require("../../lib/templates/partials/emailFooter");
+const sendEmail = require('../../lib/emailService');
 
 
 
@@ -89,6 +91,64 @@ exports.createProject = async (req, res) => {
       include: { documents: true }
     });
     
+      const prosIdsd = (prosId || "")
+        .split(",")
+        .map(id => parseInt(id.trim()))
+        .filter(id => !isNaN(id));
+
+        console.log("prosIdsd", prosIdsd);
+
+        if (prosIdsd.length > 0) {
+            const companyDetails = await prisma.ProBusinessDetails.findMany({
+              where: { 
+                userId: { in: prosIdsd } 
+              },
+              select: { companyName: true, companyEmail: true } // fetch only needed fields
+            });
+
+            if (companyDetails.length > 0) {
+              for (const element of companyDetails) {
+                await sendEmail({
+                  to: element.companyEmail, // Send to each company's email
+                  subject: "A New Project Has Been Assigned to You",
+                  html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eaeaea; border-radius: 6px; overflow: hidden;">
+                      ${emailHeader()}
+
+                      <div style="padding: 20px;">
+                        <h2 style="color: #333;">New Project Assigned</h2>
+                        <p>Dear ${element.companyName || "Company"},</p>
+                        <p>We are pleased to inform you that a new project has been assigned to your company. You can review the project details and place your bid directly from your dashboard.</p>
+                        
+                        <a href="${process.env.FRONTEND_PUBLIC_URL}/sign-in" style="display: inline-block; padding: 10px 20px; margin: 20px 0; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 4px;">
+                          Go to Login
+                        </a>
+
+                        <p>If you have any questions or need assistance, please contact our support team.</p>
+                        <p style="color: #999;">Thanks,<br/>The YourCompany Team</p>
+                      </div>
+
+                      ${emailFooter()}
+                    </div>
+                  `
+                });
+              }
+            } else {
+              console.log("No companies found for provided IDs.");
+            }
+          } else {
+            console.log("No valid IDs provided.");
+          }
+
+
+
+
+
+
+
+
+
+
     return res.json({status : 200,message: "Project created successfully",data: newRequest});
   } 
   catch (error) 
@@ -179,8 +239,10 @@ exports.getcompanyinformation = async (req,res)=>{
   try {
     
 
+    
+
+
      const companies = await prisma.ProBusinessDetails.findMany({
-        where : {status : "4"},
         select: {
           userId: true,
           companyName: true,

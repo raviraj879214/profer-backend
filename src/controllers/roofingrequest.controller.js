@@ -1,7 +1,8 @@
 const { PrismaClient } = require('@prisma/client'); 
 const prisma = new PrismaClient(); 
-
-
+const emailHeader = require("../lib/templates/partials/emailHeader");
+const emailFooter = require("../lib/templates/partials/emailFooter");
+const sendEmail = require('../lib/emailService');
 
 exports.createRoofingRequest = async (req, res) => {
   try {
@@ -12,7 +13,7 @@ exports.createRoofingRequest = async (req, res) => {
       workDescription
     } = req.body;
 
-         const drawings = req.files['drawings']?.[0] || null;
+          const drawings = req.files['drawings']?.[0] || null;
           const insurance = req.files['insurance']?.[0] || null;
           const projectOther = req.files['projectother']?.[0] || null;
           const mediaFiles = req.files['mediaFiles'] || [];
@@ -72,6 +73,39 @@ exports.createRoofingRequest = async (req, res) => {
       },
       include: { files: true }
     });
+
+
+      await sendEmail({
+          to: `${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`,
+          subject: "New Roofing Request Submitted",
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eaeaea; border-radius: 6px; overflow: hidden;">
+              ${emailHeader()}
+
+              <div style="padding: 20px;">
+                <h2 style="color: #333;">New Roofing Request</h2>
+                <p>Hi Admin,</p>
+                <p>A new roofing request has been submitted. Here are the details:</p>
+
+                <ul style="line-height: 1.6; color: #555;">
+                  <li><strong>Name:</strong> ${newRequest.fullName}</li>
+                  <li><strong>Email:</strong> ${newRequest.emailAddress}</li>
+                  <li><strong>Phone:</strong> ${newRequest.phoneNumber}</li>
+                  <li><strong>Preferred Contact:</strong> ${newRequest.preferredContactMethod}</li>
+                  <li><strong>Preferred Calling Time:</strong> ${newRequest.preferredCallingTime}</li>
+                  <li><strong>Project Title:</strong> ${newRequest.projectTitle}</li>
+                  <li><strong>Project Address:</strong> ${newRequest.projectAddress}</li>
+                </ul>
+
+                <p style="margin-top: 20px; color: #999;">Thanks</p>
+              </div>
+
+              ${emailFooter()}
+            </div>
+          `
+        });
+
+
 
     return res.json({status : 200,message: "Roofing request created successfully",data: newRequest});
   } 
