@@ -180,6 +180,7 @@ exports.getcompanyinformation = async (req,res)=>{
     
 
      const companies = await prisma.ProBusinessDetails.findMany({
+        where : {status : "4"},
         select: {
           userId: true,
           companyName: true,
