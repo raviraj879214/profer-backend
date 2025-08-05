@@ -72,6 +72,7 @@ exports.createprosBusinessRequest = async (req, res) => {
         qualifications: JSON.stringify(parseToArray(qualifications)),
         companyLogo,
         ownerLicense,
+       
       }
     });
 

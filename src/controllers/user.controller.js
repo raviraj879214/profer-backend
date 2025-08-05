@@ -3,8 +3,6 @@ const sendEmail = require("../lib/emailService");
 
 
 exports.testPublic = (req, res) => {
-
-  
   res.json({ message: '🟢 Public route accessed successfully (no auth required)' });
 };
 
@@ -22,6 +20,7 @@ exports.testProtected = (req, res) => {
       id: req.user.id,
       email: req.user.email,
       role: req.user.role.name,
+      status : req.user.status
     },
   });
 };

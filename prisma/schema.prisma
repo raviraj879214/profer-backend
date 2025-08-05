@@ -29,6 +29,7 @@ model User {
   subscriptions      Subscriptions[]  // Relation to Subscriptions
   businessDetails    ProBusinessDetails?
   @@map("User")  // Map to actual table name
+   credentials  Credential[] // Relation to credentials
 }
 
 
@@ -162,8 +163,10 @@ model ProBusinessDetails {
   qualifications     String     @db.Text    // <-- change to Text
   companyLogo        String?    @db.Text    // <-- change to Text (file path can be long)
   ownerLicense       String?    @db.Text    // (future file)
-  
-
+  phone              String?
+  website            String?
+  maps               String?
+  facebook           String?
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
 }
@@ -231,3 +234,26 @@ model Bid {
 
 
 
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String?
+  message   String?
+  type      String?   // e.g., "alert", "order", "payment"
+  isRead    Boolean   @default(false)
+  createdAt DateTime  @default(now())
+}
+
+
+model Credential {
+  id           Int       @id @default(autoincrement())
+  userId       Int
+  section      String    // e.g. "Insurance", "Safety Certifications"
+  name         String    // Document name entered by user
+  fileUrl      String    // Path to the uploaded file
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user         User      @relation(fields: [userId], references: [id])
+}

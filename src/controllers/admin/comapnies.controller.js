@@ -14,8 +14,8 @@ exports.getcompaniesregistrationbystatus= async (req,res)=>{
             where: { status: status ,roleId : 4 },
             include: {
                 businessDetails: true,
-                subscriptions: true
-                
+                subscriptions: true,
+                credentials : true
             }
             });
 
@@ -60,7 +60,7 @@ exports.approvecompanies = async (req, res) => {
         where: { 
             id: { in: ids }  // array of IDs
         },
-        data: { status: "1" } 
+        data: { status: "4" } 
         });
 
     return res.json({status: 200,message: "Roofing request(s) deleted successfully",deletedCount: existingRequests.length});
@@ -97,7 +97,7 @@ exports.blockcompanies = async (req, res) => {
         where: { 
             id: { in: ids }  // array of IDs
         },
-        data: { status: "2" } 
+        data: { status: "5" } 
         });
 
     return res.json({status: 200,message: "Roofing request(s) deleted successfully",deletedCount: existingRequests.length});
@@ -134,7 +134,7 @@ exports.unblockcompanies = async (req, res) => {
         where: { 
             id: { in: ids }  // array of IDs
         },
-        data: { status: "1" } 
+        data: { status: "4" } 
         });
 
     return res.json({status: 200,message: "Roofing request(s) deleted successfully",deletedCount: existingRequests.length});
