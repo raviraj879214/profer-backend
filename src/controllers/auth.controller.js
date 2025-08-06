@@ -8,7 +8,7 @@ const { PrismaClient } = require('@prisma/client');
 const sendEmail = require('../lib/emailService');
 
 const prisma = new PrismaClient(); 
-
+const logActivity = require('../lib/Logs/activityLogger');
 
 const generateToken = (user) => {
   return jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, {
@@ -54,7 +54,7 @@ exports.login = async (req, res) => {
     }
 
     const token = generateToken(user);
-
+     await logActivity('Admin Logged In ', user.id);
     res.json({status : 200 , token, user: { id: user.id, email: user.email, role: user.role } });
   } 
   catch (error)

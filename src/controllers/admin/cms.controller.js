@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client'); 
 const prisma = new PrismaClient(); 
-
+const logActivity = require('../../lib/Logs/activityLogger');
 
 
 
@@ -26,6 +26,7 @@ exports.getcmpages = async (req, res) => {
 
 exports.updatecmspage = async (req, res) => {
     try {
+        const userId = req.user.id;  
         let { CmsID, CmsText } = req.body;
         console.log("update cms", CmsID, CmsText);
 
@@ -49,6 +50,10 @@ exports.updatecmspage = async (req, res) => {
             where: { CmsID: cmsId },
             data: { CmsText: CmsText }
         });
+
+
+        await logActivity('Admin Updated Cms', userId);
+
 
         return res.status(200).json({
             status: 200,

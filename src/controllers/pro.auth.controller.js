@@ -276,14 +276,19 @@ exports.proslogin = async (req, res) => {
 
     // 1. Find user
     const user = await prisma.user.findUnique({
-      where: { email: emailaddress }, // make sure column name is correct
+      where: { 
+          email: emailaddress,
+          
+         }, 
       include: { role: true },
     });
 
     if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ status: 401, error: "Invalid email or password" });
     }
-
+    if(user.status == "5"){
+       return res.status(401).json({ status: 401, error: "The account has been blocked please contact admin" });
+    }
     
    
     const subscription = await prisma.subscriptions.findFirst({

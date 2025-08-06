@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const emailHeader = require("../../lib/templates/partials/emailHeader");
 const emailFooter = require("../../lib/templates/partials/emailFooter");
 const sendEmail = require('../../lib/emailService');
-
+const logActivity = require('../../lib/Logs/activityLogger');
 
 
 exports.getcompaniesregistrationbystatus= async (req,res)=>{
@@ -41,6 +41,7 @@ exports.getcompaniesregistrationbystatus= async (req,res)=>{
 
 exports.approvecompanies = async (req, res) => {
   try {
+    const userId = req.user?.id || 0;  
     const { id } = req.params; // Example: "1,2,3,4,5"
     const ids = id.split(',').map(num => parseInt(num, 10)).filter(Boolean); // Convert to array & remove invalid
 
@@ -99,7 +100,7 @@ exports.approvecompanies = async (req, res) => {
         },
         data: { status: "4" } 
         });
-
+    await logActivity('Admin action: Approved companies', userId);
     return res.json({status: 200,message: "Roofing request(s) deleted successfully",deletedCount: existingRequests.length});
   } 
   catch (error)
@@ -113,6 +114,7 @@ exports.approvecompanies = async (req, res) => {
 
 exports.blockcompanies = async (req, res) => {
   try {
+    const userId = req.user?.id || 0;  
     const { id } = req.params; // Example: "1,2,3,4,5"
     const ids = id.split(',').map(num => parseInt(num, 10)).filter(Boolean); // Convert to array & remove invalid
 
@@ -161,7 +163,7 @@ exports.blockcompanies = async (req, res) => {
         },
         data: { status: "5" } 
         });
-
+         await logActivity('Companies blocked by Admin', userId);
     return res.json({status: 200,message: "Roofing request(s) deleted successfully",deletedCount: existingRequests.length});
   } 
   catch (error)
@@ -175,6 +177,7 @@ exports.blockcompanies = async (req, res) => {
 
 exports.unblockcompanies = async (req, res) => {
   try {
+     const userId = req.user?.id || 0;  
     const { id } = req.params; // Example: "1,2,3,4,5"
     const ids = id.split(',').map(num => parseInt(num, 10)).filter(Boolean); // Convert to array & remove invalid
 
@@ -237,7 +240,7 @@ exports.unblockcompanies = async (req, res) => {
         },
         data: { status: "4" } 
         });
-
+        await logActivity('Companies un-blocked by Admin', userId);
     return res.json({status: 200,message: "Roofing request(s) deleted successfully",deletedCount: existingRequests.length});
   } 
   catch (error)

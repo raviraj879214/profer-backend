@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client'); 
 const prisma = new PrismaClient(); 
-
+const emailHeader = require("../../lib/templates/partials/emailHeader");
+const emailFooter = require("../../lib/templates/partials/emailFooter");
+const sendEmail = require('../../lib/emailService');
 
 
 exports.getprojectdetailsbyprosid = async (req,res)=>{
@@ -56,6 +58,39 @@ exports.makebidbypro = async (req, res) => {
         proId : parseInt(proId)
       },
     });
+
+    const projectdetails = await prisma.Project.findUnique({
+      where : { id : projectId }
+    });
+
+    await sendEmail({
+        to: `${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`,
+        subject: "New Bid Placed on Your Project",
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eaeaea; border-radius: 6px; overflow: hidden;">
+            ${emailHeader()}
+
+            <div style="padding: 20px;">
+              <h2 style="color: #333;">New Bid Notification</h2>
+              <p>Hi Admin,</p>
+              <p>One of your Pros has placed a bid on a project. Here are the project details:</p>
+
+              <ul style="line-height: 1.6; color: #555;">
+                <li><strong>Project Title:</strong> ${projectdetails.projectTitle}</li>
+                <li><strong>Work Description:</strong> ${projectdetails.workDescription}</li>
+              </ul>
+
+              <p style="margin-top: 20px; color: #999;">Please log in to the admin panel to review the bid.</p>
+            </div>
+
+            ${emailFooter()}
+          </div>
+        `
+      });
+
+        
+
+
 
     res.json({ status: 200, message: "Bid created successfully", data: createbid });
   } catch (error) {

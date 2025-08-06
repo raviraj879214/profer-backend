@@ -257,3 +257,14 @@ model Credential {
 
   user         User      @relation(fields: [userId], references: [id])
 }
+
+
+
+
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?     // optional: track which user performed the action
+  action    String
+  meta      Json?    // optional: store extra details (e.g., what was updated)
+  createdAt DateTime @default(now())
+}

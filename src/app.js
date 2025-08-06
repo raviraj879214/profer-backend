@@ -106,6 +106,9 @@ app.use('/api',procredntialuploader);
 
 
 
+//logging 
+const loggingrouter = require('./routes/log.route.js');
+app.use('/api',loggingrouter);
 
 
 

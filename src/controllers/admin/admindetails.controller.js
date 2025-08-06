@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { PrismaClient } = require('@prisma/client'); 
 const prisma = new PrismaClient(); 
+const logActivity = require('../../lib/Logs/activityLogger');
 
 exports.getuserdetailsbyid = async (req, res) => {
   try {
@@ -39,6 +40,7 @@ exports.getuserdetailsbyid = async (req, res) => {
 
 exports.updateuserdetails = async (req, res) => {
   try {
+     const userId = req.user?.id || 0;  
     const { id, firstname, lastname } = req.body;
 
     // Basic validation
@@ -58,6 +60,8 @@ exports.updateuserdetails = async (req, res) => {
       data: { firstname, lastname }
     });
 
+    await logActivity('Admin Updated profile', userId);
+
     res.status(200).json({ status: 200, message: "User updated successfully", data: userupdate });
   } catch (error) {
     console.error("Update error:", error);
@@ -71,6 +75,9 @@ exports.updateuserdetails = async (req, res) => {
 
 exports.updateuserpassword = async (req, res) => {
   try {
+
+    const userId = req.user?.id || 0;  
+
     const { id, currentpassword, newpassword } = req.body;
 
     // 1. Find user by ID
@@ -96,7 +103,7 @@ exports.updateuserpassword = async (req, res) => {
       where: { id: parseInt(id) },
       data: { password: hashedNewPassword }
     });
-
+    await logActivity('Admin Updated Password', userId);
     return res.json({ status: 200, message: "Password updated successfully" });
   } catch (error) {
     return res.status(500).json({ status: 500, message: error.message });

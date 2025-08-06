@@ -4,12 +4,13 @@ const prisma = new PrismaClient();
 const emailHeader = require("../../lib/templates/partials/emailHeader");
 const emailFooter = require("../../lib/templates/partials/emailFooter");
 const sendEmail = require('../../lib/emailService');
-
+const logActivity = require('../../lib/Logs/activityLogger');
 
 
 
 exports.createProject = async (req, res) => {
   try {
+    const userId = req.user?.id || 0;  
     const { 
       fullName, phoneNumber, emailAddress, status,
       budget, projectTitle, projectAddress, projectDetails,
@@ -141,13 +142,7 @@ exports.createProject = async (req, res) => {
           }
 
 
-
-
-
-
-
-
-
+    await logActivity('Admin Created Project ' + projectTitle, userId);
 
     return res.json({status : 200,message: "Project created successfully",data: newRequest});
   } 
@@ -223,6 +218,8 @@ exports.deleteRoofingRequest = async (req, res) => {
     await prisma.roofingRequest.deleteMany({
       where: { id: { in: ids } },
     });
+
+    
     return res.json({status: 200,message: "Roofing request(s) deleted successfully",deletedCount: existingRequests.length});
   } 
   catch (error)
@@ -342,6 +339,7 @@ exports.projectupdatestatus = async (req, res) => {
 
 exports.deleteprojectlist = async (req, res) => {
   try {
+     const userId = req.user?.id || 0;  
     const { id } = req.params; // Example: "1,2,3,4,5"
     const ids = id.split(',').map(num => parseInt(num, 10)).filter(Boolean); // Convert to array & remove invalid
 
@@ -362,6 +360,8 @@ exports.deleteprojectlist = async (req, res) => {
     await prisma.Project.deleteMany({
       where: { id: { in: ids } },
     });
+
+    await logActivity('Admin Deleted Project ', userId);
     return res.json({status: 200,message: "Roofing request(s) deleted successfully",deletedCount: existingRequests.length});
   } 
   catch (error)
