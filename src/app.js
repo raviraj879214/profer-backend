@@ -38,7 +38,7 @@ function sendNotification(userId, message) {
 
 app.use(cors({
    origin: 'https://profer-ui.vercel.app',  
-   //origin: 'http://localhost:3000',  
+   
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'],
   credentials: true
 }));
