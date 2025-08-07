@@ -237,7 +237,7 @@ model Bid {
 
 model Notification {
   id        Int      @id @default(autoincrement())
-  userId    Int
+  userId    Int?
   title     String?
   message   String?
   type      String?   // e.g., "alert", "order", "payment"

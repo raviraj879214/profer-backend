@@ -37,8 +37,8 @@ function sendNotification(userId, message) {
 
 
 app.use(cors({
-   origin: 'https://profer-ui.vercel.app',  
-   
+  origin: 'https://profer-ui.vercel.app',  
+   //origin: 'http://localhost:3000',  
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'],
   credentials: true
 }));
@@ -105,13 +105,9 @@ const procredntialuploader = require('./routes/pro/credentialRoutes.route.js');
 app.use('/api',procredntialuploader);
 
 
-
 //logging 
 const loggingrouter = require('./routes/log.route.js');
 app.use('/api',loggingrouter);
-
-
-
 
 
 
