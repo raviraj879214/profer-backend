@@ -34,28 +34,28 @@ exports.createProject = async (req, res) => {
             allFiles.push({
               fileType: 'drawings',
               originalName: drawings.originalname,
-              fileUrl: `${baseUrl}/${drawings.filename}`,
+              fileUrl: `${'https://profer-backend.onrender.com/uploads/roofing'}/${drawings.filename}`,
             });
           }
           if (insurance) {
             allFiles.push({
               fileType: 'insurance',
               originalName: insurance.originalname,
-              fileUrl: `${baseUrl}/${insurance.filename}`,
+              fileUrl: `${'https://profer-backend.onrender.com/uploads/roofing'}/${insurance.filename}`,
             });
           }
           if (projectOther) {
             allFiles.push({
               fileType: 'projectother',
               originalName: projectOther.originalname,
-              fileUrl: `${baseUrl}/${projectOther.filename}`,
+              fileUrl: `${'https://profer-backend.onrender.com/uploads/roofing'}/${projectOther.filename}`,
             });
           }
           mediaFiles.forEach(file => {
             allFiles.push({
               fileType: 'mediaFiles',
               originalName: file.originalname,
-              fileUrl: `${baseUrl}/${file.filename}`,
+              fileUrl: `${'https://profer-backend.onrender.com/uploads/roofing'}/${file.filename}`,
             });
           });
 
