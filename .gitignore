@@ -23,3 +23,7 @@ coverage/
 
 # TypeScript
 *.tsbuildinfo
+
+
+//ignore images 
+lib/uploads/
