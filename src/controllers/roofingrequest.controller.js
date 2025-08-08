@@ -20,7 +20,7 @@ exports.createRoofingRequest = async (req, res) => {
 
           // Build all files array for DB with full URL
           const allFiles = [];
-          const baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/roofing`;
+          const baseUrl = `${process.env.Next_PUBLIC_BACKEND_URL}/uploads/roofing`;
 
           if (drawings) {
             allFiles.push({
