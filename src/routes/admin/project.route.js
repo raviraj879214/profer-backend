@@ -5,7 +5,7 @@ const { getProjectlist, createProject, getcompanyinformation, getbidlist, projec
 const router = express.Router();
 
 const createMulterUpload = require('../../lib/uploadHelper');
-const upload = createMulterUpload('uploads/roofing');
+const upload = createMulterUpload('/uploads/roofing');
 
 const { authenticate } = require('../../middlewares/auth.middleware');
 
