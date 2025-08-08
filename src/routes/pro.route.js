@@ -1,5 +1,5 @@
 const express = require('express');
-const { createuserandsendotp, createcheckout, getprosuserdetails, updateprospaymentdetails, transfertempusertousertable, proslogin } = require('../controllers/pro.auth.controller');
+const { createuserandsendotp, createcheckout, getprosuserdetails, updateprospaymentdetails, transfertempusertousertable, proslogin, getprosdetailbyid } = require('../controllers/pro.auth.controller');
 const router = express.Router();
 
 
@@ -19,6 +19,7 @@ router.post('/activate-user-tempuser', transfertempusertousertable);
 
 router.post('/pro-login',proslogin);
 
+router.get('/get-pro-details/:userid',getprosdetailbyid);
 
 
 module.exports = router;

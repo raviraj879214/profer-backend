@@ -181,8 +181,8 @@ exports.updateprospaymentdetails = async (req, res) => {
 exports.transfertempusertousertable = async (req, res) => {
   try {
     console.log("transfer started");
-    const { emailaddress } = req.body;
-    console.log("emailaddress", emailaddress);
+    const { emailaddress ,  paymentIntentId} = req.body;
+    console.log("emailaddress transfer", emailaddress,paymentIntentId);
 
     // 1. Find temp user
     const tempUser = await prisma.TempUser.findUnique({
@@ -225,7 +225,7 @@ exports.transfertempusertousertable = async (req, res) => {
       const subscription = await tx.Subscriptions.create({
         data: {
           userId: user.id,
-          StripeSubscriptionID: tempUser.paymentintentid || "pending",
+          StripeSubscriptionID: paymentIntentId,
           PlanName: "Pro Plan",
           PlanType: "Year",
           Amount: 300,
@@ -326,6 +326,36 @@ exports.proslogin = async (req, res) => {
   }
 };
 
+
+
+
+exports.getprosdetailbyid = async (req, res) => {
+  try {
+    const { userid } = req.params;
+
+    const subscriptions = await prisma.Subscriptions.findMany({
+      where: {  userId: parseInt(userid) },
+    });
+
+    if (subscriptions.length > 0) {
+      res.json({
+        status: 200,
+        message: "Pros fetched successfully",
+        data: subscriptions,
+      });
+    } else {
+      res.status(404).json({
+        status: 404,
+        message: "Pros not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: error.message || "Internal server error",
+    });
+  }
+};
 
 
 

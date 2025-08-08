@@ -49,7 +49,7 @@ model Subscriptions {
   UpdatedAt             DateTime  @updatedAt
 
   // Relation to Users table
-  user                  User      @relation(fields: [userId], references: [id])
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("Subscriptions")  // Map to your MySQL table name (if existing)
 }
@@ -144,7 +144,7 @@ model TempUser {
 model ProBusinessDetails {
   id                 Int       @id @default(autoincrement())
   userId             Int       @unique
-  user               User      @relation(fields: [userId], references: [id])
+  user               User      @relation(fields: [userId], references: [id],onDelete : Cascade)
 
   companyName        String?
   companyPhone       String?
