@@ -28,7 +28,7 @@ exports.createProject = async (req, res) => {
 
           // Build all files array for DB with full URL
           const allFiles = [];
-          const baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/roofing`;
+          const baseUrl = `https://profer-backend.onrender.com/uploads/roofing`;
 
           if (drawings) {
             allFiles.push({
